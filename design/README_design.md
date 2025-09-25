@@ -116,32 +116,70 @@ cmake --install .
 
 ## 6️⃣ Justificativa do Design
 
-O design do Mini Letterboxd foi elaborado considerando boas práticas de **Programação Orientada a Objetos (POO)** e escalabilidade do sistema.
+1. Separação de Responsabilidades
 
-### Principais pontos:
+O projeto foi dividido em classes com papéis bem definidos, seguindo o princípio da responsabilidade única:
 
-- **Separação de responsabilidades:**  
-  Cada classe tem uma função bem definida, garantindo que alterações em uma funcionalidade não impactem outras partes do sistema.
+AppController: centraliza a lógica de negócio. É responsável por operações como cadastro e login de usuários, criação de mídias e adição de reviews. Não trata interface nem persistência, evitando mistura de camadas.
 
-- **Encapsulamento:**  
-  Os atributos das classes são privados, com métodos públicos (getters/setters) controlando acesso e validação de dados.
+CLIView: responsável apenas pela interação em linha de comando, exibindo menus e chamando os métodos do controlador.
 
-- **Abstração e Polimorfismo:**  
-  - `Media` é uma classe abstrata, permitindo que novas mídias sejam adicionadas sem alterar o código existente.  
-  - `Movie` e `Series` implementam `getTotalDuration()`, exemplificando polimorfismo dinâmico.  
-  - `GUIView` é uma interface abstrata, possibilitando múltiplas implementações (CLI, GUI).
+Persistence: lida unicamente com o salvamento e carregamento de dados. Se futuramente for necessário trocar de .txt para JSON ou banco de dados, somente essa classe será alterada.
 
-- **Composição e associações:**  
-  - `User` contém uma lista de `Review` e referências fracas para amigos (`weak_ptr`) evitando ciclos de memória.  
-  - `AppController` gerencia usuários e mídias, garantindo centralização da lógica do sistema.
+Essa organização facilita a manutenção e a evolução do sistema, permitindo alterar ou substituir módulos de forma independente.
 
-- **Facilidade de extensão:**  
-  Novos tipos de mídia, interfaces ou funcionalidades podem ser implementados sem modificar as classes existentes.
+2. Encapsulamento
 
-- **Preparação para persistência:**  
-  A classe `Persistence` foi isolada, permitindo salvar/carregar dados em arquivos e facilitando futuras integrações com banco de dados.
+Todos os atributos são privados, e o acesso ocorre apenas por métodos públicos controlados. Isso garante consistência e proteção dos dados:
 
-- **Consistência e manutenção:**  
-  Cabeçalhos claros e documentação das classes facilitam compreensão do projeto e manutenção futura.
+Em User, o atributo password nunca é exposto diretamente. O acesso é feito via método checkPassword(), evitando manipulação indevida da senha.
 
+Em Media, a média de avaliação (ratingAverage) só pode ser alterada pelo método updateRating(), que permite aplicar regras de validação antes de atualizar o valor.
 
+A lista de amigos em User é armazenada via weak_ptr, protegendo contra ciclos de memória e mantendo o controle do sistema sobre como essa informação é acessada.
+
+Esse modelo garante maior segurança e consistência, reduzindo erros de acesso direto a atributos.
+
+3. Abstração e Polimorfismo
+
+A classe Media é abstrata, definindo o método puro getTotalDuration(). Isso permite que Movie e Series implementem suas próprias versões, sem impactar o restante do sistema.
+
+A interface GUIView estabelece os métodos necessários para qualquer implementação de interface (linha de comando, GUI em Qt etc.). Assim, diferentes modos de interação podem ser adicionados sem alterar a lógica principal.
+
+Esse uso de abstração e polimorfismo garante extensibilidade e flexibilidade.
+
+4. Composição e Associações
+
+User contém uma lista de Review e referências fracas para amigos, representando relações reais entre usuários.
+
+AppController compõe listas de usuários e mídias, funcionando como ponto central de orquestração.
+
+O relacionamento entre Media e Review mostra a associação natural: cada mídia pode ter várias avaliações, e cada avaliação pertence a um usuário.
+
+Esses vínculos representam corretamente o domínio do problema e foram projetados para evitar dependências desnecessárias.
+
+5. Extensibilidade
+
+O design facilita a adição de novas funcionalidades:
+
+Novos tipos de mídia (como Documentary ou MiniSeries) podem ser implementados estendendo Media.
+
+Outras interfaces gráficas podem ser adicionadas implementando GUIView.
+
+A camada de persistência pode ser expandida para suportar diferentes formatos de dados.
+
+Assim, o sistema está preparado para crescer sem que classes já existentes precisem ser modificadas.
+
+6. Preparação para Persistência
+
+A classe Persistence foi isolada, lidando exclusivamente com leitura/escrita de dados. Isso facilita futuras integrações com arquivos em outros formatos ou bancos de dados relacionais, sem impacto na lógica do sistema.
+
+7. Consistência e Manutenção
+
+Arquivos .h concentram apenas interfaces e definições de classes.
+
+Métodos seguem uma nomenclatura clara (getUsername, addReview, getTotalDuration).
+
+O uso de smart pointers (shared_ptr, weak_ptr) garante gerenciamento automático de memória, reduzindo riscos de vazamentos.
+
+Essa padronização contribui para clareza, legibilidade e facilidade de manutenção.
