@@ -12,29 +12,33 @@ Este documento descreve a **arquitetura e design** do projeto Mini Letterboxd, a
 
 ## 2️⃣ Estrutura de Diretórios
 
+## 2️⃣ Estrutura de Diretórios
+
 MiniLetterboxd/
 │
-├─ include/ # Arquivos headers (.h)
-│ ├─ User.h
-│ ├─ Media.h
-│ ├─ Movie.h
-│ ├─ Series.h
-│ ├─ Review.h
-│ ├─ FriendList.h
-│ ├─ Persistence.h
-│ ├─ AppController.h
-│ ├─ CLIView.h
-│ └─ GUIView.h
+├── design/                          # Entregáveis da Etapa 1
+│   ├── include/                     # Cabeçalhos (.h) das principais classes
+│   │   ├── User.h
+│   │   ├── Media.h
+│   │   ├── Movie.h
+│   │   ├── Series.h
+│   │   ├── Review.h
+│   │   ├── FriendList.h
+│   │   ├── Persistence.h
+│   │   ├── AppController.h
+│   │   ├── CLIView.h
+│   │   └── GUIView.h
+│   │
+│   ├── uml/                         # Diagramas UML
+│   │   └── UML_MiniLetterboxd.png
+│   │
+│   ├── README_design.md             # Explicação do design, instruções e justificativa
+│   └── CMakeLists.txt               # Build inicial
 │
-├─ design/ # UML e README do design
-│ ├─ UML_MiniLetterboxd.png
-│ └─ README_design.md
+├── src/                             # Código fonte (main.cpp de teste opcional)
 │
-├─ src/ # Código fonte (main.cpp de teste opcional)
-│
-├─ CMakeLists.txt # Build inicial
-│
-└─ README.md # Descrição geral do projeto
+└── README.md                         # Descrição geral do projeto
+
 
 ---
 
