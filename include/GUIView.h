@@ -17,15 +17,15 @@ public:
     // ---- Métodos de login e usuário ----
     virtual void showLoginScreen() = 0;
     virtual void showUserPage(const User& user) = 0;
-    virtual void showFriends(const std::vector<User>& friends) = 0;
+    virtual void showFriends(const std::vector<std::shared_ptr<User>>& friends) = 0;
 
     // ---- Métodos para mídia ----
     virtual void showMediaList(const std::vector<std::shared_ptr<Media>>& mediaList) = 0;
-    virtual void showMediaDetails(const Media& media) = 0;
+    virtual void showMediaDetails(const std::shared_ptr<Media>& media) = 0;
 
     // ---- Métodos para reviews ----
-    virtual void showReviews(const std::vector<Review>& reviews) = 0;
-    virtual void showAddReviewForm(const Media& media) = 0;
+    virtual void showReviews(const std::vector<std::shared_ptr<Review>>& reviews) = 0;
+    virtual void showAddReviewForm(const std::shared_ptr<Media>& media) = 0;
 
     // ---- Mensagens gerais ----
     virtual void showMessage(const std::string& msg) = 0;
