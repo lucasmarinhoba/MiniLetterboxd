@@ -1,4 +1,4 @@
-#include ".h"
+#include "FriendList.h"
 
 // Adiciona um amigo à lista
 void FriendList::addFriend(const std::shared_ptr<User>& user) {
