@@ -3,37 +3,42 @@
 ## 📦 Pré-requisitos
 - **C++17** ou superior  
 - **CMake** (>= 3.16)  
-- Compilador (g++/clang++ no Linux/Mac ou MSVC no Windows)  
+- Compilador:
+  - **Windows**: [MinGW](http://mingw-w64.org/) (instalado e configurado no PATH)  
+  - **Linux/Mac**: g++ ou clang  
+
+---
 
 ## ⚙️ Compilação
 
-1. Clone este repositório:
+### 🔹 Windows (MinGW)
+Abra o **PowerShell** ou **Prompt de Comando** na pasta do projeto e execute:
 
-   git clone https://github.com/SEU_USUARIO/MiniLetterboxd.git
+```powershell
+cmake -S . -B build -G "MinGW Makefiles"
+cmake --build build
+Isso criará a pasta build/ e gerará o executável MiniLetterboxd.exe dentro dela.
 
-   
-   cd MiniLetterboxd
-Crie a pasta de build e compile:
+🔹 Linux/Mac
+Abra o terminal na pasta do projeto e execute:
 
 bash
 Copiar código
-mkdir build
-cd build
-cmake ..
-cmake --build .
-Isso irá gerar o executável MiniLetterboxd dentro da pasta build/.
+cmake -S . -B build
+cmake --build build
+Isso criará a pasta build/ e gerará o executável MiniLetterboxd.
 
 ▶️ Execução
-No Linux/Mac:
-
-bash
-Copiar código
-./MiniLetterboxd
-No Windows (PowerShell):
-
+🔹 Windows (PowerShell)
 powershell
 Copiar código
+cd build
 .\MiniLetterboxd.exe
+🔹 Linux/Mac
+bash
+Copiar código
+cd build
+./MiniLetterboxd
 🧪 Funcionalidades disponíveis no CLI
 No menu principal, você poderá:
 
@@ -47,9 +52,9 @@ Listar filmes/séries
 
 Avaliar (nota + review)
 
-Listar amigos e reviews de amigos
+Listar amigos e reviews de amigos (em construção)
 
 Salvar e carregar dados (persistência em arquivos .txt)
 
 ⚠️ Os dados de usuários, filmes e reviews são salvos automaticamente em arquivos de texto na pasta data/.
-Ao rodar novamente, o programa carregará esses dados.
+Ao rodar novamente, o programa carregará esses dados
