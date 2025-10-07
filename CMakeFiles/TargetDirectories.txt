@@ -1,9 +1,0 @@
-C:/Users/lucas/Downloads/MiniLetterboxd/CMakeFiles/MiniLetterboxd.dir
-C:/Users/lucas/Downloads/MiniLetterboxd/CMakeFiles/edit_cache.dir
-C:/Users/lucas/Downloads/MiniLetterboxd/CMakeFiles/rebuild_cache.dir
-C:/Users/lucas/Downloads/MiniLetterboxd/CMakeFiles/list_install_components.dir
-C:/Users/lucas/Downloads/MiniLetterboxd/CMakeFiles/install.dir
-C:/Users/lucas/Downloads/MiniLetterboxd/CMakeFiles/install/local.dir
-C:/Users/lucas/Downloads/MiniLetterboxd/CMakeFiles/install/strip.dir
-C:/Users/lucas/Downloads/MiniLetterboxd/CMakeFiles/MiniLetterboxd_autogen_timestamp_deps.dir
-C:/Users/lucas/Downloads/MiniLetterboxd/CMakeFiles/MiniLetterboxd_autogen.dir
