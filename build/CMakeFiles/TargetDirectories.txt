@@ -1,7 +1,0 @@
-C:/Users/lucas/OneDrive/Documentos/GitHub/MiniLetterboxd/build/CMakeFiles/MiniLetterboxd.dir
-C:/Users/lucas/OneDrive/Documentos/GitHub/MiniLetterboxd/build/CMakeFiles/edit_cache.dir
-C:/Users/lucas/OneDrive/Documentos/GitHub/MiniLetterboxd/build/CMakeFiles/rebuild_cache.dir
-C:/Users/lucas/OneDrive/Documentos/GitHub/MiniLetterboxd/build/CMakeFiles/list_install_components.dir
-C:/Users/lucas/OneDrive/Documentos/GitHub/MiniLetterboxd/build/CMakeFiles/install.dir
-C:/Users/lucas/OneDrive/Documentos/GitHub/MiniLetterboxd/build/CMakeFiles/install/local.dir
-C:/Users/lucas/OneDrive/Documentos/GitHub/MiniLetterboxd/build/CMakeFiles/install/strip.dir
