@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UserPageDialog</class>
+ <widget class="QDialog" name="UserPageDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Página do Usuário</string>
+  </property>
+
+  <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+      <number>15</number>
+    </property>
+   
+   <!-- Informações do usuário -->
+   <item>
+    <widget class="QLabel" name="labelUsername">
+     <property name="text">
+      <string>👤 Usuário: -</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="styleSheet">
+      <string>font-size: 16pt; font-weight: bold;</string>
+     </property>
+    </widget>
+   </item>
+
+   <item>
+    <widget class="QLabel" name="labelWatchedCount">
+     <property name="text">
+      <string>🎥 Filmes/Séries assistidos: -</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="styleSheet">
+      <string>font-size: 14pt;</string>
+     </property>
+    </widget>
+   </item>
+
+   <item>
+    <widget class="QLabel" name="labelLastReview">
+     <property name="text">
+      <string>📝 Última review: -</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="styleSheet">
+      <string>font-size: 12pt;</string>
+     </property>
+    </widget>
+   </item>
+
+   <item>
+    <widget class="QLabel" name="labelTotalHours">
+     <property name="text">
+      <string>⏱️ Tempo total assistido: -</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="styleSheet">
+      <string>font-size: 12pt;</string>
+     </property>
+    </widget>
+   </item>
+
+   <item>
+    <widget class="QLabel" name="labelTotalFriends">
+     <property name="text">
+      <string>👥 Amigos: -</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="styleSheet">
+      <string>font-size: 12pt;</string>
+     </property>
+    </widget>
+   </item>
+
+   <!-- Reviews -->
+   <item>
+    <widget class="QTextEdit" name="textReviews">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="styleSheet">
+      <string>font-size: 12pt; padding: 5px;</string>
+     </property>
+    </widget>
+   </item>
+
+   <!-- Botão Fechar -->
+   <item>
+    <widget class="QPushButton" name="btnClose">
+     <property name="text">
+      <string>Fechar</string>
+     </property>
+     <property name="minimumHeight">
+      <number>40</number>
+     </property>
+     <property name="styleSheet">
+      <string>
+       QPushButton { background-color: #2E3440; color: white; border-radius: 8px; font-size: 14px; padding: 6px 12px; }
+       QPushButton:hover { background-color: #4C566A; }
+      </string>
+     </property>
+    </widget>
+   </item>
+
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

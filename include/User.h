@@ -11,28 +11,30 @@ private:
     std::string password;
     std::vector<std::shared_ptr<Review>> reviews;
     std::vector<std::weak_ptr<User>> friends;
-    std::vector<std::shared_ptr<Media>> watchedMedias; // Mídias assistidas
+    std::vector<std::shared_ptr<Media>> watchedMedias; // Filmes e séries assistidas
 
 public:
     User(const std::string& username, const std::string& password);
 
-    // Getters básicos
+    // ----- Getters básicos -----
     std::string getUsername() const;
     std::string getPassword() const; // necessário para persistência
     bool checkPassword(const std::string& pass) const;
 
-    // Amigos
+    // ----- Amigos -----
     void addFriend(std::shared_ptr<User> user);
+    bool removeFriend(const std::string& username);
+    std::shared_ptr<User> getFriend(const std::string& username) const;
     std::vector<std::weak_ptr<User>> getFriends() const;
 
-    // Reviews
+    // ----- Reviews -----
     void addReview(std::shared_ptr<Review> review);
     void removeReview(const std::string& mediaTitle);
-    std::vector<std::shared_ptr<Review>> getReviews() const;
+    std::vector<std::shared_ptr<Review>>& getReviews(); 
 
-    // Mídias assistidas
+    // ----- Mídias assistidas -----
     void addWatchedMedia(std::shared_ptr<Media> media);
     size_t getWatchedCount() const;
     std::string getLastReviewInfo() const;
-    double getTotalWatchTimeHours() const;
+    double getTotalWatchTimeHours() const; // total em horas
 };

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AddSeriesDialog</class>
+ <widget class="QDialog" name="AddSeriesDialog">
+  <property name="windowTitle">
+   <string>Adicionar Série</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="labelTitle">
+       <property name="text">
+        <string>Título:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="lineEditTitle"/>
+     </item>
+
+     <item row="1" column="0">
+      <widget class="QLabel" name="labelYear">
+       <property name="text">
+        <string>Ano:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEditYear"/>
+     </item>
+
+     <item row="2" column="0">
+      <widget class="QLabel" name="labelEpisodeDuration">
+       <property name="text">
+        <string>Duração do episódio (min):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="lineEditEpisodeDuration"/>
+     </item>
+
+     <item row="3" column="0">
+      <widget class="QLabel" name="labelSeasons">
+       <property name="text">
+        <string>Número de temporadas:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="lineEditSeasons"/>
+     </item>
+
+     <item row="4" column="0">
+      <widget class="QLabel" name="labelEpisodesPerSeason">
+       <property name="text">
+        <string>Número de episódios por temporada:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="lineEditEpisodesPerSeason"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnAdd">
+     <property name="text">
+      <string>Adicionar</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

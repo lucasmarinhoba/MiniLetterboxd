@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AddReviewDialog</class>
+ <widget class="QDialog" name="AddReviewDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>350</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Adicionar Review</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="labelMediaTitle">
+     <property name="text">
+      <string>Título da mídia:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="lineEditMediaTitle"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="labelReviewText">
+     <property name="text">
+      <string>Review:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextEdit" name="textEditReview"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="labelRating">
+     <property name="text">
+      <string>Nota (0-10):</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="lineEditRating"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="labelDate">
+     <property name="text">
+      <string>Data da visualização:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDateEdit" name="dateEdit"/>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnAdd">
+     <property name="text">
+      <string>Adicionar</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

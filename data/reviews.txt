@@ -1,0 +1,8 @@
+The Dark Knight;pedro;7;prefiro o batman do ben affleck;01/01/2025
+Interstellar;lucasbasilio;8;bom filme;01/01/2025
+Interstellar;pedro;10;a melhor ficção cientifica do seculo;01/01/2025
+Um Sonho de Liberdade;lucasbasilio;10;um dos melhores filmes ja feitos;07/01/2025
+Toy Story;lucasbasilio;10;otima animação;07/10/2023
+Toy Story;pedro;5;ruim;07/10/2025
+Game of Thrones;lucasbasilio;6;o pior final de uma série da historia da televisão;01/04/2022
+Stranger Things;lucasbasilio;7;começou bem, mas se perdeu;01/01/2025

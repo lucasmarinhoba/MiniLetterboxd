@@ -1,0 +1,71 @@
+#include "DeleteReviewDialog.h"
+#include <QVBoxLayout>
+#include <QMessageBox>
+#include <QSpacerItem>
+
+DeleteReviewDialog::DeleteReviewDialog(QWidget* parent, AppController* ctrl)
+    : QDialog(parent), controller(ctrl)
+{
+    setupUI();
+    populateMedias();
+}
+
+void DeleteReviewDialog::setupUI() {
+    setWindowTitle("Excluir Review");
+    resize(360, 220);
+
+    auto layout = new QVBoxLayout(this);
+    layout->setAlignment(Qt::AlignTop);
+    layout->setSpacing(15);
+
+    titleLabel = new QLabel("Selecione a mídia cuja review deseja excluir:");
+    titleLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
+    layout->addWidget(titleLabel);
+
+    mediaSelector = new QComboBox(this);
+    layout->addWidget(mediaSelector);
+
+    layout->addSpacerItem(new QSpacerItem(0, 20));
+
+    deleteButton = new QPushButton("Excluir Review");
+    cancelButton = new QPushButton("Cancelar");
+
+    deleteButton->setStyleSheet("background-color: #b22; color: white; padding: 6px;");
+    cancelButton->setStyleSheet("background-color: #ccc; padding: 6px;");
+
+    layout->addWidget(deleteButton);
+    layout->addWidget(cancelButton);
+
+    connect(deleteButton, &QPushButton::clicked, this, &DeleteReviewDialog::onDeleteClicked);
+    connect(cancelButton, &QPushButton::clicked, this, &DeleteReviewDialog::onCancelClicked);
+}
+
+void DeleteReviewDialog::populateMedias() {
+    auto user = controller->getLoggedUser();
+    auto reviews = user->getReviews();
+
+    for (const auto& review : reviews) {
+        mediaSelector->addItem(QString::fromStdString(review->getMedia()->getTitle()));
+    }
+}
+
+void DeleteReviewDialog::onDeleteClicked() {
+    QString selectedTitle = mediaSelector->currentText();
+
+    if (selectedTitle.isEmpty()) {
+        QMessageBox::warning(this, "Erro", "Nenhuma mídia selecionada.");
+        return;
+    }
+
+    try {
+        controller->deleteReview(selectedTitle.toStdString());
+        QMessageBox::information(this, "Sucesso", "Review excluída com sucesso!");
+        accept();
+    } catch (const std::exception& e) {
+        QMessageBox::critical(this, "Erro", e.what());
+    }
+}
+
+void DeleteReviewDialog::onCancelClicked() {
+    reject();
+}

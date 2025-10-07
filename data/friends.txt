@@ -1,0 +1,6 @@
+alice;bob
+lucasbasilio;anasousa
+lucasbasilio;kimberly
+lucasbasilio;pedro
+anasousa;lucasbasilio
+pedro;lucasbasilio

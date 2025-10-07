@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <memory>
-
 // Forward declaration
 class Media;
 class User;

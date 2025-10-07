@@ -13,4 +13,8 @@ public:
     std::string getType() const override {
         return "Movie";
     }
+
+    bool isSeries() const override {
+        return false;  // Filme não é série
+    }
 };

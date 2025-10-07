@@ -4,112 +4,231 @@
 #include <iostream>
 #include <algorithm>
 
-AppController::AppController() : loggedUser(nullptr) {}
+AppController::AppController() : loggedUser(nullptr) {
+    if (!persistence.loadData("", users, medias)) {
+        loadDefaults();
+        saveData();
+    }
+}
 
 // ----- Usuário -----
-bool AppController::registerUser(const std::string& username, const std::string& password) {
-    for (const auto& user : users) {
-        if (user->getUsername() == username) {
-            std::cout << "Erro: Usuário já existe!\n";
+bool AppController::registerUser(const std::string& username, const std::string& password, std::string& message) {
+    for (const auto& u : users) {
+        if (u->getUsername() == username) {
+            message = "Erro: Usuário já existe!";
             return false;
         }
     }
-
-    auto newUser = std::make_shared<User>(username, password);
-    users.push_back(newUser);
-    std::cout << "Usuário registrado com sucesso!\n";
+    users.push_back(std::make_shared<User>(username, password));
+    saveData();
+    message = "Usuário registrado com sucesso!";
     return true;
 }
 
 bool AppController::login(const std::string& username, const std::string& password) {
-    for (auto& user : users) {
-        if (user->getUsername() == username && user->checkPassword(password)) {
-            loggedUser = user;
-            std::cout << "Login realizado com sucesso! Bem-vindo, " << username << "!\n";
+    std::string msg;
+    return login(username, password, msg);
+}
+
+bool AppController::login(const std::string& username, const std::string& password, std::string& message) {
+    for (auto& u : users) {
+        if (u->getUsername() == username && u->checkPassword(password)) {
+            loggedUser = u;
+            message = "Login realizado com sucesso!";
+            if (onLogin) onLogin();
             return true;
         }
     }
-    std::cout << "Erro: Usuário ou senha incorretos!\n";
+    message = "Erro: Usuário ou senha incorretos!";
     return false;
 }
 
-void AppController::addFriend(const std::string& username) {
-    if (!loggedUser) {
-        std::cout << "Erro: Nenhum usuário logado!\n";
-        return;
-    }
-
-    for (auto& user : users) {
-        if (user->getUsername() == username) {
-            loggedUser->addFriend(user);
-            std::cout << "Amigo adicionado com sucesso!\n";
-            return;
-        }
-    }
-    std::cout << "Erro: Usuário não encontrado!\n";
+void AppController::logout() {
+    loggedUser = nullptr;
+    if (onLogout) onLogout();
 }
 
 std::shared_ptr<User> AppController::getLoggedUser() const {
     return loggedUser;
 }
 
-// ----- Mídias -----
-void AppController::addMovie(const std::string& title, int year, int duration) {
-    auto movie = std::make_shared<Movie>(title, year, duration);
-    medias.push_back(movie);
-    std::cout << "Filme adicionado com sucesso!\n";
-}
-
-void AppController::addSeries(const std::string& title, int year, int episodeDuration, const std::vector<int>& episodes) {
-    auto series = std::make_shared<Series>(title, year, episodeDuration, episodes);
-    medias.push_back(series);
-    std::cout << "Série adicionada com sucesso!\n";
-}
-
-void AppController::addReview(const std::string& mediaTitle, int score, const std::string& text, const std::string& date) {
-    if (!loggedUser) {
-        std::cout << "Erro: Nenhum usuário logado!\n";
-        return;
-    }
-
-    std::shared_ptr<Media> foundMedia = nullptr;
-    for (auto& media : medias) {
-        if (media->getTitle() == mediaTitle) {
-            foundMedia = media;
-            break;
+// ----- Amizade -----
+bool AppController::addFriend(const std::string& friendUsername, std::string& message) {
+    if (!loggedUser) { message = "Nenhum usuário logado."; return false; }
+    for (auto& u : users) {
+        if (u->getUsername() == friendUsername) {
+            loggedUser->addFriend(u);
+            saveData();
+            message = "Amigo adicionado com sucesso!";
+            return true;
         }
     }
+    message = "Usuário não encontrado!";
+    return false;
+}
 
-    if (!foundMedia) {
-        std::cout << "Erro: Mídia não encontrada!\n";
+bool AppController::deleteFriend(const std::string& friendUsername, std::string& message) {
+    if (!loggedUser) { message = "Nenhum usuário logado."; return false; }
+    if (loggedUser->removeFriend(friendUsername)) {
+        saveData();
+        message = "Amigo removido com sucesso!";
+        return true;
+    }
+    message = "Amigo não encontrado!";
+    return false;
+}
+
+// ----- Mídias -----
+bool AppController::addMovie(const std::string& title, int year, int duration, std::string& message) {
+    medias.push_back(std::make_shared<Movie>(title, year, duration));
+    saveData();
+    message = "Filme adicionado com sucesso!";
+    return true;
+}
+
+// ----- ADICIONAR SÉRIE (assinatura canonical) -----
+// title, year, totalEpisodes, totalSeasons, episodeDuration
+bool AppController::addSeries(const std::string& title, int year, int totalEpisodes, int totalSeasons, int episodeDuration, std::string& message) {
+    medias.push_back(std::make_shared<Series>(title, year, totalEpisodes, totalSeasons, episodeDuration));
+    saveData();
+    message = "Série adicionada com sucesso!";
+    return true;
+}
+
+bool AppController::addReview(const std::string& mediaTitle, int score, const std::string& text, const std::string& date, std::string& message) {
+    if (!loggedUser) { message = "Nenhum usuário logado."; return false; }
+
+    auto it = std::find_if(medias.begin(), medias.end(),
+        [&](const std::shared_ptr<Media>& m){ return m->getTitle() == mediaTitle; });
+    if (it == medias.end()) { message = "Mídia não encontrada."; return false; }
+
+    auto review = std::make_shared<Review>(*it, loggedUser, score, text, date);
+    loggedUser->addReview(review);
+    (*it)->addReview(review);
+    saveData();
+
+    message = "Review adicionada com sucesso!";
+    return true;
+}
+
+bool AppController::deleteReview(const std::string& mediaTitle, std::string& message) {
+    if (!loggedUser) { message = "Nenhum usuário logado."; return false; }
+
+    auto& reviews = loggedUser->getReviews();
+    auto it = std::remove_if(reviews.begin(), reviews.end(),
+        [&](const std::shared_ptr<Review>& r){ return r && r->getMedia()->getTitle() == mediaTitle; });
+
+    if (it != reviews.end()) {
+        reviews.erase(it, reviews.end());
+        for (auto& m : medias)
+            if (m->getTitle() == mediaTitle)
+                m->removeReviewByUser(loggedUser);
+
+        saveData();
+        message = "Review excluída com sucesso!";
+        return true;
+    }
+
+    message = "Review não encontrada!";
+    return false;
+}
+
+// ----- Auxiliares -----
+std::vector<std::shared_ptr<Media>> AppController::getMedias() const { return medias; }
+
+std::vector<std::string> AppController::getMediaTitles() const {
+    std::vector<std::string> titles;
+    for (const auto& m : medias) titles.push_back(m->getTitle());
+    return titles;
+}
+
+// ----- Amizade e atividade -----
+void AppController::showFriendLastActivity(const std::string& friendUsername) const {
+    auto friendUser = std::find_if(users.begin(), users.end(),
+        [&](const std::shared_ptr<User>& u){ return u->getUsername() == friendUsername; });
+
+    if (friendUser == users.end()) {
+        std::cout << "Amigo não encontrado.\n";
         return;
     }
 
-    auto review = std::make_shared<Review>(foundMedia, loggedUser, score, text, date);
-    loggedUser->addReview(review);
-    foundMedia->addReview(review);
+    auto reviews = (*friendUser)->getReviews();
+    if (reviews.empty()) {
+        std::cout << friendUsername << " ainda não fez nenhuma review.\n";
+        return;
+    }
 
-    std::cout << "Review adicionada com sucesso!\n";
+    std::cout << "Últimas atividades de " << friendUsername << ":\n";
+    for (const auto& r : reviews) {
+        std::cout << "- " << r->getMedia()->getTitle()
+                  << " (" << r->getDate() << "): "
+                  << r->getScore() << "/10 - " << r->getText() << "\n";
+    }
 }
 
-// Getter para CLIView
-std::vector<std::shared_ptr<Media>> AppController::getMedias() const {
-    return medias;
+QStringList AppController::getFriendLastActivity(const std::string& friendUsername) const {
+    QStringList list;
+    auto friendUser = std::find_if(users.begin(), users.end(),
+        [&](const std::shared_ptr<User>& u){ return u->getUsername() == friendUsername; });
+
+    if (friendUser == users.end()) return list;
+
+    auto reviews = (*friendUser)->getReviews();
+    for (const auto& r : reviews) {
+        list.append(QString::fromStdString(r->getMedia()->getTitle() + " (" + r->getDate() + ") " +
+                                           std::to_string(r->getScore()) + "/10 - " + r->getText()));
+    }
+    return list;
+}
+
+// ----- Mostrar reviews de mídia -----
+void AppController::showUserReviewsForMedia(const std::string& mediaTitle) const {
+    auto media = std::find_if(medias.begin(), medias.end(),
+        [&](const std::shared_ptr<Media>& m){ return m->getTitle() == mediaTitle; });
+
+    if (media == medias.end()) {
+        std::cout << "Mídia não encontrada.\n";
+        return;
+    }
+
+    auto reviews = (*media)->getReviews();
+    if (reviews.empty()) {
+        std::cout << "Nenhuma review para \"" << mediaTitle << "\".\n";
+        return;
+    }
+
+    std::cout << "Reviews para \"" << mediaTitle << "\":\n";
+    for (const auto& r : reviews) {
+        if (r) {
+            std::cout << "- " << r->getUser()->getUsername()
+                      << ": " << r->getScore() << "/10 - "
+                      << r->getText() << " (" << r->getDate() << ")\n";
+        }
+    }
 }
 
 // ----- Persistência -----
 bool AppController::loadData() {
-    return Persistence::loadData("data.txt", users, medias);
+    bool okUsers   = persistence.loadUsers(users);
+    bool okMedias  = persistence.loadMedias(medias);
+    bool okReviews = persistence.loadReviews(medias, users);
+    bool okFriends = persistence.loadFriends(users);
+    return okUsers && okMedias && okReviews && okFriends;
 }
 
 bool AppController::saveData() {
-    return Persistence::saveData("data.txt", users, medias);
+    bool okUsers   = persistence.saveUsers(users);
+    bool okMedias  = persistence.saveMedias(medias);
+    bool okReviews = persistence.saveReviews(medias);
+    bool okFriends = persistence.saveFriends(users);
+    return okUsers && okMedias && okReviews && okFriends;
 }
 
-// ----- Dados padrão -----
+// ----- Defaults -----
 void AppController::addDefaultUser(const std::string& username, const std::string& password) {
     auto it = std::find_if(users.begin(), users.end(),
-        [&](const std::shared_ptr<User>& u){ return u->getUsername() == username; });
+        [&](const std::shared_ptr<User>& u) { return u->getUsername() == username; });
+
     if (it == users.end()) {
         users.push_back(std::make_shared<User>(username, password));
     }
@@ -119,57 +238,55 @@ void AppController::loadDefaults() {
     addDefaultUser("alice", "123");
     addDefaultUser("bob", "456");
 
-    auto user1 = *std::find_if(users.begin(), users.end(),
-        [](const std::shared_ptr<User>& u){ return u->getUsername() == "alice"; });
-    auto user2 = *std::find_if(users.begin(), users.end(),
-        [](const std::shared_ptr<User>& u){ return u->getUsername() == "bob"; });
+    auto u1 = *std::find_if(users.begin(), users.end(), [](const auto& u){ return u->getUsername() == "alice"; });
+    auto u2 = *std::find_if(users.begin(), users.end(), [](const auto& u){ return u->getUsername() == "bob"; });
 
-    user1->addFriend(user2);
+    u1->addFriend(u2);
 
-    auto movieExists = [&](const std::string& title){
-        return std::any_of(medias.begin(), medias.end(), [&](const auto& m){ return m->getTitle() == title; });
-    };
+    auto exists = [&](const std::string& title){ return std::any_of(medias.begin(), medias.end(), [&](const auto& m){ return m->getTitle() == title; }); };
 
-    if (!movieExists("Inception")) medias.push_back(std::make_shared<Movie>("Inception", 2010, 148));
-    if (!movieExists("The Matrix")) medias.push_back(std::make_shared<Movie>("The Matrix", 1999, 136));
-    if (!movieExists("Breaking Bad")) medias.push_back(std::make_shared<Series>("Breaking Bad", 2008, 47, std::vector<int>{7,13,13,13,16}));
-}
+    // Filmes
+    if (!exists("The Dark Knight")) medias.push_back(std::make_shared<Movie>("The Dark Knight", 2008, 152));
+    if (!exists("Interstellar")) medias.push_back(std::make_shared<Movie>("Interstellar", 2014, 169));
+    if (!exists("Clube da Luta")) medias.push_back(std::make_shared<Movie>("Clube da Luta", 1999, 139));
+    if (!exists("Forrest Gump")) medias.push_back(std::make_shared<Movie>("Forrest Gump", 1994, 142));
+    if (!exists("Um Sonho de Liberdade")) medias.push_back(std::make_shared<Movie>("Um Sonho de Liberdade", 1994, 142));
+    if (!exists("Pulp Fiction")) medias.push_back(std::make_shared<Movie>("Pulp Fiction", 1994, 154));
+    if (!exists("The Godfather")) medias.push_back(std::make_shared<Movie>("The Godfather", 1972, 175));
+    if (!exists("The Godfather Part II")) medias.push_back(std::make_shared<Movie>("The Godfather Part II", 1974, 202));
+    if (!exists("A Rede Social")) medias.push_back(std::make_shared<Movie>("A Rede Social", 2010, 120));
+    if (!exists("Gladiator")) medias.push_back(std::make_shared<Movie>("Gladiator", 2000, 155));
+    if (!exists("Avengers: Endgame")) medias.push_back(std::make_shared<Movie>("Avengers: Endgame", 2019, 181));
+    if (!exists("The Lion King")) medias.push_back(std::make_shared<Movie>("The Lion King", 1994, 88));
+    if (!exists("Toy Story")) medias.push_back(std::make_shared<Movie>("Toy Story", 1995, 81));
+    if (!exists("Jurassic Park")) medias.push_back(std::make_shared<Movie>("Jurassic Park", 1993, 127));
+    if (!exists("Titanic")) medias.push_back(std::make_shared<Movie>("Titanic", 1997, 195));
+    if (!exists("Missao Impossivel")) medias.push_back(std::make_shared<Movie>("Missao Impossivel", 1995, 120));
+    if (!exists("Orgulho e Preconceito")) medias.push_back(std::make_shared<Movie>("Orgulho e Preconceito", 2005, 120));
 
-// ----- Auto-Demo -----
+    // Séries (title, year, totalEpisodes, totalSeasons, episodeDuration)
+    if (!exists("Game of Thrones"))
+        medias.push_back(std::make_shared<Series>("Game of Thrones", 2011, 73, 8, 55));
+
+    if (!exists("Stranger Things"))
+        medias.push_back(std::make_shared<Series>("Stranger Things", 2016, 34, 4, 50));
+
+    if (!exists("The Office"))
+        medias.push_back(std::make_shared<Series>("The Office", 2005, 194, 9, 22));
+
+    }
+
+// ----- Auto-demo -----
 void AppController::runAutoDemo() {
-    std::cout << "\n========== AUTO-DEMO ==========\n";
+    std::cout << "Executando demo automática..." << std::endl;
+    if (users.empty() || medias.empty()) return;
 
-    loadDefaults(); // não limpa dados existentes
+    auto demoUser = users.front();
+    loggedUser = demoUser;
 
-    std::cout << "\n--- Usuários cadastrados ---\n";
-    for (const auto& user : users) {
-        std::cout << "- " << user->getUsername() << "\n";
-    }
+    std::string msg;
+    addReview(medias.front()->getTitle(), 9, "Ótimo!", "01/01/2025", msg);
+    addReview(medias.back()->getTitle(), 8, "Muito bom!", "02/01/2025", msg);
 
-    std::cout << "\n--- Mídias cadastradas ---\n";
-    for (const auto& media : medias) {
-        std::cout << "- " << media->getTitle()
-                  << " (" << media->getType() << ")"
-                  << " - Média: " << media->getAverageScore() << "\n";
-    }
-
-    login("alice", "123");
-
-    std::cout << "\n--- Informações do usuário ---\n";
-    showLoggedUserInfo();
-
-    std::cout << "\n========== FIM DO AUTO-DEMO ==========\n";
-}
-
-// ----- Info usuário logado -----
-void AppController::showLoggedUserInfo() const {
-    if (!loggedUser) {
-        std::cout << "Nenhum usuário logado.\n";
-        return;
-    }
-
-    std::cout << "Usuário: " << loggedUser->getUsername() << "\n";
-    std::cout << "Mídias assistidas: " << loggedUser->getWatchedCount() << "\n";
-    std::cout << "Tempo total (h): " << loggedUser->getTotalWatchTimeHours() << "\n";
-    std::cout << "Última review: " << loggedUser->getLastReviewInfo() << "\n";
+    loggedUser = nullptr;
 }

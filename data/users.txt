@@ -1,0 +1,7 @@
+alice;123
+bob;456
+lucasbasilio;1234
+kimberly;1234
+anasousa;1234
+pedro;1234
+gabriel;1234

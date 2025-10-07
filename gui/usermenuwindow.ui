@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UserMenuWindow</class>
+ <widget class="QWidget" name="UserMenuWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Mini Letterboxd - Menu do Usuário</string>
+  </property>
+
+  <layout class="QVBoxLayout" name="mainLayout" spacing="20">
+   
+    <!-- Grupo de informações do usuário -->
+    <item>
+     <widget class="QFrame" name="infoFrame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="infoLayout" spacing="5">
+       <item>
+        <widget class="QLabel" name="usernameLabel">
+         <property name="text"><string>Usuário: -</string></property>
+         <property name="alignment"><set>Qt::AlignCenter</set></property>
+         <property name="styleSheet"><string>font-size: 16pt; font-weight: bold;</string></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="totalWatchedLabel">
+         <property name="text"><string>Filmes/Séries assistidos: -</string></property>
+         <property name="alignment"><set>Qt::AlignCenter</set></property>
+         <property name="styleSheet"><string>font-size: 12pt;</string></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lastReviewLabel">
+         <property name="text"><string>Última review: -</string></property>
+         <property name="alignment"><set>Qt::AlignCenter</set></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="totalHoursLabel">
+         <property name="text"><string>Tempo total assistido: -</string></property>
+         <property name="alignment"><set>Qt::AlignCenter</set></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="totalFriendsLabel">
+         <property name="text"><string>Amigos: -</string></property>
+         <property name="alignment"><set>Qt::AlignCenter</set></property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+
+    <!-- Scroll para os botões -->
+    <item>
+     <widget class="QScrollArea" name="buttonScrollArea">
+      <property name="widgetResizable"><bool>true</bool></property>
+      <widget class="QWidget" name="buttonContainer">
+       <layout class="QVBoxLayout" name="buttonLayout" spacing="10">
+        
+        <!-- Botões principais -->
+        <item><widget class="QPushButton" name="addMovieBtn"><property name="text"><string>Adicionar Filme</string></property></widget></item>
+        <item><widget class="QPushButton" name="addSeriesBtn"><property name="text"><string>Adicionar Série</string></property></widget></item>
+        <item><widget class="QPushButton" name="addReviewBtn"><property name="text"><string>Adicionar Review</string></property></widget></item>
+        <item><widget class="QPushButton" name="deleteReviewBtn"><property name="text"><string>Remover Review</string></property></widget></item>
+        <item><widget class="QPushButton" name="addFriendBtn"><property name="text"><string>Adicionar Amigo</string></property></widget></item>
+        <item><widget class="QPushButton" name="deleteFriendBtn"><property name="text"><string>Remover Amigo</string></property></widget></item>
+        <item><widget class="QPushButton" name="listFriendsBtn"><property name="text"><string>Listar Amigos</string></property></widget></item>
+        <item><widget class="QPushButton" name="listMediasBtn"><property name="text"><string>Listar Mídias</string></property></widget></item>
+        <item><widget class="QPushButton" name="friendActivityBtn"><property name="text"><string>Atividade de amigo</string></property></widget></item>
+        <item><widget class="QPushButton" name="userPageBtn"><property name="text"><string>Minha Página</string></property></widget></item>
+        <item><widget class="QPushButton" name="logoutBtn"><property name="text"><string>Logout</string></property></widget></item>
+
+       </layout>
+      </widget>
+     </widget>
+    </item>
+
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

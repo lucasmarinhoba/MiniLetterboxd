@@ -1,41 +1,20 @@
 #pragma once
 #include "Media.h"
-#include <vector>
-#include <string>
 
 class Series : public Media {
 private:
-    int episodeDuration;                   // duração de cada episódio em minutos
-    std::vector<int> episodesPerSeason;    // número de episódios por temporada
+    int totalEpisodes;       // total de episódios
+    int totalSeasons;        // total de temporadas
+    int episodeDuration;     // duração de cada episódio em minutos
 
 public:
-    // Construtor principal
-    Series(const std::string& t, int y, int epDur, const std::vector<int>& episodes)
-        : Media(t, y, 0),   // duração inicial 0; getTotalDuration() calcula depois
-          episodeDuration(epDur),
-          episodesPerSeason(episodes) {}
+    Series(const std::string& title, int year, int totalEps, int seasons, int epDur);
 
-    // Construtor sobrecarregado (apenas 3 parâmetros)
-    Series(const std::string& t, int y, int epDur)
-        : Series(t, y, epDur, {}) {}
+    int getTotalDuration() const override;  // total em minutos
+    std::string getType() const override;
+    bool isSeries() const override;
 
-    // Adiciona uma temporada com quantidade de episódios
-    void addSeason(int episodes) {
-        episodesPerSeason.push_back(episodes);
-    }
-
-    // Retorna a duração total de todos os episódios
-    int getTotalDuration() const override {
-        int total = 0;
-        for (auto e : episodesPerSeason) total += e * episodeDuration;
-        return total;
-    }
-
-    // Retorna tipo da mídia
-    std::string getType() const override {
-        return "Series";
-    }
-
-    // Getter para episódios por temporada
-    const std::vector<int>& getEpisodesPerSeason() const { return episodesPerSeason; }
+    int getTotalEpisodes() const;
+    int getTotalSeasons() const;
+    int getEpisodeDuration() const;
 };

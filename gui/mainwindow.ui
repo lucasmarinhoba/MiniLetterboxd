@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Mini Letterboxd - Login</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>20</number>
+    </property>
+
+    <!-- Mensagem de boas-vindas -->
+    <item>
+     <widget class="QLabel" name="welcomeLabel">
+      <property name="text">
+       <string>&lt;h2&gt;🎬 Bem-vindo ao Mini Letterboxd!&lt;/h2&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font-size: 28px; font-weight: bold; color: #2c3e50;</string>
+      </property>
+     </widget>
+    </item>
+
+    <!-- Botões (placeholder, serão estilizados no cpp) -->
+    <item>
+     <widget class="QPushButton" name="btnRegister">
+      <property name="text"><string>Registrar Usuário</string></property>
+      <property name="minimumHeight"><number>50</number></property>
+     </widget>
+    </item>
+
+    <item>
+     <widget class="QPushButton" name="btnLogin">
+      <property name="text"><string>Login</string></property>
+      <property name="minimumHeight"><number>50</number></property>
+     </widget>
+    </item>
+
+    <item>
+     <widget class="QPushButton" name="btnExit">
+      <property name="text"><string>Sair</string></property>
+      <property name="minimumHeight"><number>50</number></property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

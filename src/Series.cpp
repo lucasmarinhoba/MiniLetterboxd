@@ -1,27 +1,31 @@
 #include "Series.h"
 
-// Construtor sobrecarregado
-Series::Series(const std::string& t, int y, int epDur)
-    : Series(t, y, epDur, {}) {}
+Series::Series(const std::string& t, int y, int totalEps, int seasons, int epDur)
+    : Media(t, y, totalEps * epDur),   // duração total agora está correta
+      totalEpisodes(totalEps),
+      totalSeasons(seasons),
+      episodeDuration(epDur) {}
 
-// Adiciona uma temporada com quantidade de episódios
-void Series::addSeason(int episodes) {
-    episodesPerSeason.push_back(episodes);
-}
-
-// Retorna a duração total de todos os episódios
 int Series::getTotalDuration() const {
-    int total = 0;
-    for (auto e : episodesPerSeason) total += e * episodeDuration;
-    return total;
+    return totalEpisodes * episodeDuration; // total em minutos
 }
 
-// Retorna tipo da mídia
 std::string Series::getType() const {
     return "Series";
 }
 
-// Getter para episódios por temporada
-const std::vector<int>& Series::getEpisodesPerSeason() const {
-    return episodesPerSeason;
+bool Series::isSeries() const {
+    return true;
+}
+
+int Series::getTotalEpisodes() const { 
+    return totalEpisodes; 
+}
+
+int Series::getTotalSeasons() const { 
+    return totalSeasons; 
+}
+
+int Series::getEpisodeDuration() const { 
+    return episodeDuration; 
 }

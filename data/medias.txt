@@ -1,0 +1,21 @@
+The Dark Knight;Movie;2008;152
+Interstellar;Movie;2014;169
+Clube da Luta;Movie;1999;139
+Forrest Gump;Movie;1994;142
+Um Sonho de Liberdade;Movie;1994;142
+Pulp Fiction;Movie;1994;154
+The Godfather;Movie;1972;175
+The Godfather Part II;Movie;1974;202
+A Rede Social;Movie;2010;120
+Gladiator;Movie;2000;155
+Avengers: Endgame;Movie;2019;181
+The Lion King;Movie;1994;88
+Toy Story;Movie;1995;81
+Jurassic Park;Movie;1993;127
+Titanic;Movie;1997;195
+Missao Impossivel;Movie;1995;120
+Orgulho e Preconceito;Movie;2005;120
+Game of Thrones;Series;2011;73;8;55
+Stranger Things;Series;2016;34;4;50
+The Office;Series;2005;194;9;22
+1917;Movie;2019;120
